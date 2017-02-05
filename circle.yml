@@ -1,0 +1,3 @@
+machine:
+  environment:
+    JEST_JUNIT_OUTPUT: $CIRCLE_TEST_REPORTS/alpha-acl.xml
