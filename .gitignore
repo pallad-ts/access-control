@@ -1,0 +1,6 @@
+.idea
+**/.DS_Store
+node_modules
+coverage
+*.js
+*.d.ts
