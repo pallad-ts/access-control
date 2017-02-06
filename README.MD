@@ -15,6 +15,11 @@ acl.isAllowed(new UserParticipant(user), "view", post)
 
 This simple approach allows to implement any type of Access system you want.
 
+## Install
+```bash
+npm install alpha-ac
+```
+
 ## Usage
 
 ```typescript
