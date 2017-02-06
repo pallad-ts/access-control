@@ -1,3 +1,3 @@
-export * from './ACL';
+export * from './AccessControl';
 export * from './Participant';
 export * from './Rule';

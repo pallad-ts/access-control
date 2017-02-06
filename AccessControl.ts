@@ -2,7 +2,7 @@ import {RuleInterface} from "./Rule";
 import {Participant} from "./Participant";
 
 
-export class ACL {
+export class AccessControl {
     private rules: Array<RuleInterface>;
 
     constructor() {

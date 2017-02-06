@@ -1,6 +1,6 @@
 {
-  "name": "alpha-acl",
-  "version": "0.1.0",
+  "name": "alpha-ac",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -30,9 +30,9 @@
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wookieb/alpha-acl/issues"
+    "url": "https://github.com/wookieb/alpha-ac/issues"
   },
-  "homepage": "https://github.com/wookieb/alpha-acl#readme",
+  "homepage": "https://github.com/wookieb/alpha-ac#readme",
   "jest": {
     "transform": {
       ".ts": "./node_modules/ts-jest/preprocessor.js"
