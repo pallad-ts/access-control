@@ -1,0 +1,22 @@
+{
+  "name": "alpha-ac",
+  "version": "1.0.1",
+  "description": "",
+  "main": "compiled/index.js",
+  "types": "compiled/index.d.ts",
+  "scripts": {
+    "test": "../../node_modules/.bin/pallad-scripts test",
+    "compile": "../../node_modules/.bin/pallad-scripts compile",
+    "lint": "../../node_modules/.bin/pallad-scripts lint",
+    "prepublishOnly": "npm run compile"
+  },
+  "files": [
+    "compiled"
+  ],
+  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
+  "license": "MIT",
+  "dependencies": {
+    "predicates": "^2.0.3",
+    "tslib": "^1.10.0"
+  }
+}

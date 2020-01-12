@@ -1,8 +1,3 @@
-.idea
-**/.DS_Store
 node_modules
 coverage
-/*.js
-*.d.ts
-npm-debug.log
-junit.xml
+compiled

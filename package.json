@@ -1,47 +1,11 @@
 {
-  "name": "alpha-ac",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "@types/es6-promise": "0.0.32"
-  },
+  "name": "root",
+  "private": true,
   "devDependencies": {
-    "@types/chai": "^3.4.34",
-    "@types/chai-as-promised": "0.0.29",
-    "@types/jest": "^18.1.1",
-    "@types/sinon": "^1.16.34",
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
-    "jest": "^18.1.0",
-    "jest-junit": "^1.1.0",
-    "sinon": "^1.17.7",
-    "ts-jest": "^18.0.2",
-    "typescript": "^2.1.5"
-  },
-  "scripts": {
-    "test": "jest",
-    "prepublish": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wookieb/alpha-acl.git"
-  },
-  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wookieb/alpha-ac/issues"
-  },
-  "homepage": "https://github.com/wookieb/alpha-ac#readme",
-  "jest": {
-    "transform": {
-      ".ts": "./node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "./__tests__/.*Test.ts$",
-    "testResultsProcessor": "./__tests__/resultsProcessor",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "@pallad/scripts": "^1.1.4",
+    "@types/jest": "^24.0.25",
+    "@types/sinon": "^7.5.1",
+    "lerna": "^3.3.0",
+    "sinon": "^7.5.0"
   }
 }
