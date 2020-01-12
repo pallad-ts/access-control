@@ -1,6 +1,6 @@
 {
   "name": "alpha-ac-module",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Module for alpha-ac",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@pallad/modules": "*",
-    "alpha-ac": "*",
+    "alpha-ac": "^2.0.0",
     "alpha-dic": "*"
   },
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
