@@ -3,4 +3,4 @@ export * from './Rule';
 export * from './Subject';
 export * from './Participant';
 export * from './AccessDeniedError';
-export * from './types';
+export * from './WithParticipant';
