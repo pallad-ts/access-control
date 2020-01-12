@@ -13,6 +13,10 @@
   "files": [
     "compiled"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wookieb/alpha-ac.git"
+  },
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
   "license": "MIT",
   "dependencies": {
