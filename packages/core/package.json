@@ -15,7 +15,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wookieb/alpha-ac.git"
+    "url": "git+https://github.com/wookieb/alpha-ac.git",
+    "directory": "packages/core"
   },
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
   "license": "MIT",

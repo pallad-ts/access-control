@@ -13,6 +13,11 @@
   "files": [
     "compiled"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wookieb/alpha-ac.git",
+    "directory": "packages/module"
+  },
   "peerDependencies": {
     "@pallad/modules": "*",
     "alpha-ac": "*",
