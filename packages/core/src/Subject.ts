@@ -57,13 +57,5 @@ export namespace Subject {
                     readonly scopeId: TId,
                     readonly payload: TPayload) {
         }
-
-        static is<TId = any, TPayload = any>(value: any): value is WithinScope<TId, TPayload> {
-            return value instanceof WithinScope;
-        }
-
-        static isForEntity<TId = any, TPayload = any>(value: any, entityType: string): value is WithinScope<TId, TPayload> {
-            return WithinScope.is(value) && value.entityType === entityType;
-        }
     }
 }

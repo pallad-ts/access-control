@@ -1,0 +1,1 @@
+export type WithParticipant<T> = T & { participant: any };
