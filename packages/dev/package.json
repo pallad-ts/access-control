@@ -1,7 +1,7 @@
 {
-  "name": "alpha-ac",
-  "version": "2.0.1",
-  "description": "",
+  "name": "alpha-ac-dev",
+  "version": "1.0.0",
+  "description": "Testing helpers for alpha-ac",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
   "scripts": {
@@ -16,13 +16,18 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wookieb/alpha-ac.git",
-    "directory": "packages/core"
+    "directory": "packages/dev"
   },
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
   "license": "MIT",
   "dependencies": {
-    "predicates": "^2.0.3",
-    "tslib": "^1.10.0"
+    "@types/sinon": "^7.5.1",
+    "sinon": "^8.0.4"
   },
-  "gitHead": "918380905faa93f0a8cd3646812785ccfa3eea2d"
+  "peerDependencies": {
+    "alpha-ac": "*"
+  },
+  "devDependencies": {
+    "alpha-ac": "*"
+  }
 }
