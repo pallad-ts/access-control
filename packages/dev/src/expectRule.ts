@@ -14,7 +14,7 @@ function displayPermissionSubjectCombination(this: any, permission: any, subject
 }
 
 function displayFullCombination(this: any, participant: any, permission: any, subject: any) {
-    return `Participant: ${this.utils.stringify(participant)}\n${displayPermissionSubjectCombination(permission, subject)}`;
+    return `Participant: ${this.utils.stringify(participant)}\n${displayPermissionSubjectCombination.call(this, permission, subject)}`;
 }
 
 function assertSupports(this: any, rule: Rule, permission: any, subject: any) {
@@ -82,11 +82,13 @@ expect.extend({
     }
 });
 
+declare global {
+    namespace jest {
+        export interface Matchers<R, T> {
+            ruleToDeny(participant: any, permission: any, subject: any): R;
 
-declare namespace jest {
-    interface Matchers<R> {
-        ruleToDeny(participant: any, permission: any, subject: any): R;
-
-        ruleToAllow(participant: any, permission: any, subject: any): R;
+            ruleToAllow(participant: any, permission: any, subject: any): R;
+        }
     }
 }
+
