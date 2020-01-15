@@ -23,6 +23,5 @@
   "dependencies": {
     "predicates": "^2.0.3",
     "tslib": "^1.10.0"
-  },
-  "gitHead": "918380905faa93f0a8cd3646812785ccfa3eea2d"
+  }
 }
