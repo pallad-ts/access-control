@@ -22,12 +22,13 @@
   "license": "MIT",
   "dependencies": {
     "@types/sinon": "^7.5.1",
+    "predicates": "^2.0.3",
     "sinon": "^8.0.4"
   },
   "peerDependencies": {
     "alpha-ac": "*"
   },
   "devDependencies": {
-    "alpha-ac": "^2.0.2"
+    "alpha-ac": "*"
   }
 }
