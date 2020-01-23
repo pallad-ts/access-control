@@ -24,9 +24,9 @@
     "alpha-dic": "*"
   },
   "devDependencies": {
-    "@pallad/modules": "*",
+    "@pallad/modules": "^1.2.0",
     "alpha-ac": "^2.0.2",
-    "alpha-dic": "*"
+    "alpha-dic": "^1.2.0"
   },
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
   "license": "MIT"

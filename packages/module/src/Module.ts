@@ -9,7 +9,7 @@ export class Module extends _Module<{ container: Container }> {
         super('alpha-ac');
     }
 
-    protected init(): void {
+    init(): void {
         this.registerAction(StandardActions.INITIALIZATION, context => {
             context.container.registerDefinition(
                 Module.getAccessControlDefinition()
