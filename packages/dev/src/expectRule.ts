@@ -85,9 +85,8 @@ expect.extend({
 declare global {
     namespace jest {
         export interface Matchers<R, T> {
-            ruleToDeny(participant: any, permission: any, subject: any): R;
-
-            ruleToAllow(participant: any, permission: any, subject: any): R;
+            ruleToDeny(participant: any, permission: any, subject: any): Promise<R>;
+            ruleToAllow(participant: any, permission: any, subject: any): Promise<R>;
         }
     }
 }
