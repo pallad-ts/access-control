@@ -1,6 +1,6 @@
 {
   "name": "alpha-ac-dev",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Testing helpers for alpha-ac",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
