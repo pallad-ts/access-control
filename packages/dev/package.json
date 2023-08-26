@@ -1,6 +1,6 @@
 {
-  "name": "alpha-ac-dev",
-  "version": "1.0.4",
+  "name": "@pallad/access-control-dev",
+  "version": "1.0.0",
   "description": "Testing helpers for alpha-ac",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
@@ -21,15 +21,15 @@
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
   "license": "MIT",
   "dependencies": {
-    "@types/sinon": "^7.5.1",
+    "@types/sinon": "^9",
     "predicates": "^2.0.3",
-    "sinon": "^8.0.4"
+    "sinon": "^9"
   },
   "peerDependencies": {
-    "alpha-ac": "*"
+    "@pallad/access-control": "*"
   },
   "devDependencies": {
-    "alpha-ac": "*"
+    "@pallad/access-control": "*"
   },
   "gitHead": "90b1a9cc288226c7a0d78b02db02bd858ccd9481"
 }

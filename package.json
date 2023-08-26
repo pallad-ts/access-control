@@ -2,10 +2,12 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "@pallad/scripts": "^1.1.4",
-    "@types/jest": "^24.0.25",
-    "@types/sinon": "^7.5.1",
-    "lerna": "^3.3.0",
-    "sinon": "^7.5.0"
-  }
+    "@pallad/scripts": "^3",
+    "@types/jest": "^29.5.4",
+    "barrelsby": "^2.8.0",
+    "lerna": "^7"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "alpha-ac-module",
+  "name": "@pallad/access-control-module",
   "version": "1.0.3",
   "description": "Module for alpha-ac",
   "main": "compiled/index.js",
@@ -25,8 +25,8 @@
   },
   "devDependencies": {
     "@pallad/modules": "^1.2.0",
-    "alpha-ac": "^2.0.2",
-    "alpha-dic": "^1.2.0"
+    "@pallad/access-control": "^1",
+    "alpha-dic": "^3"
   },
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
   "license": "MIT"

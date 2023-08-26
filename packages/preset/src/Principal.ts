@@ -1,4 +1,4 @@
-export namespace Participant {
+export namespace Principal {
     export class Anonymous {
         static INSTANCE = new Anonymous();
 

@@ -1,5 +1,5 @@
 {
-  "name": "@pallad/access-control",
+  "name": "@pallad/access-control-permission-set",
   "version": "1.0.0",
   "description": "",
   "main": "compiled/index.js",
@@ -16,11 +16,12 @@
   ],
   "repository": {
     "type": "git",
-    "directory": "packages/core"
+    "directory": "packages/permission-set"
   },
-  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
-  "license": "MIT",
+  "dependencies": {
+    "@pallad/entity-ref": "^2.0.2"
+  },
   "peerDependencies": {
-    "tslib": "^2"
+    "@pallad/access-control": "^1"
   }
 }

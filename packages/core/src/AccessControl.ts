@@ -1,45 +1,45 @@
-import {Rule} from "./Rule";
+import {Policy} from "./Policy";
 import {AccessDeniedError} from "./AccessDeniedError";
+import {AccessQuery} from "./AccessQuery";
 
-export class AccessControl {
-    private rules: Set<Rule> = new Set();
+export class AccessControl<TPrincipal = unknown, TAction extends string = string, TSubject = unknown> {
+    private policies = new Set<Policy<AccessQuery<TPrincipal, TAction, TSubject>>>();
 
-    registerRule(rule: Rule): this {
-        this.rules.add(rule);
+    registerPolicy(policy: Policy<AccessQuery<TPrincipal, TAction, TSubject>>): this {
+        this.policies.add(policy);
         return this;
     }
 
-    unregisterRule(rule: Rule): this {
-        this.rules.delete(rule);
+    deregisterRule(policy: Policy<AccessQuery<TPrincipal, TAction, TSubject>>): this {
+        this.policies.delete(policy);
         return this;
     }
 
-    async assertAccess(participant: any,
-                       privilege: any,
-                       subject: any,
-                       errorMessage?: string) {
-        const isAllowed = await this.isAllowed(participant, privilege, subject);
+    async assertGranted(
+        request: AccessQuery<TPrincipal, TAction, TSubject>,
+        errorFactory?: (request: AccessQuery) => unknown) {
+        const isAllowed = await this.isGranted(request);
         if (!isAllowed) {
-            throw new AccessDeniedError(errorMessage);
+            throw (errorFactory ? errorFactory(request) : new AccessDeniedError());
         }
         return true;
     }
 
-    async isAllowed(participant: any,
-                    privilege: any,
-                    subject: any) {
-        const rule = this.findRule(privilege, subject);
-        if (!rule) {
-            return false;
-        }
-        return rule.isAllowed(participant, privilege, subject);
-    }
+    async isGranted(request: AccessQuery<TPrincipal, TAction, TSubject>): Promise<boolean> {
+        const voteResults = await Promise.all(
+            Array.from(this.policies).map(policy => {
+                return policy(request);
+            })
+        );
 
-    private findRule(privilege: any, subject: any): Rule | undefined {
-        for (const rule of this.rules) {
-            if (rule.supports(privilege, subject)) {
-                return rule;
+        let isGranted = false;
+        for (const voteResult of voteResults) {
+            if (voteResult === false) {
+                return false;
+            } else if (voteResult === true) {
+                isGranted = true;
             }
         }
+        return isGranted;
     }
 }
