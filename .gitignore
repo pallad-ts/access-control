@@ -1,4 +1,10 @@
 node_modules
 coverage
 compiled
-*.tgz
+*.log
+junit.xml
+.idea
+**/.DS_Store
+.eslintcache
+tsnode-cache
+.task

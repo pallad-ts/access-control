@@ -8,7 +8,7 @@ function dummyPolicy(supportedActions: any[], isGranted: boolean | undefined, as
     return ({action}) => {
         if (supportedActions.includes(action)) {
             if (asyncDelay) {
-                return new Promise((resolve) => {
+                return new Promise(resolve => {
                     setTimeout(() => {
                         resolve(isGranted)
                     }, asyncDelay);
@@ -62,7 +62,7 @@ describe('AccessControl', () => {
                 await expect(accessControl.assertGranted(STANDARD_REQUEST, factory))
                     .rejects
                     .toThrowError(error);
-                sinon.assert.calledWith(factory, PRINCIPAL, ACTION_1, SUBJECT);
+                sinon.assert.calledWith(factory, {principal: PRINCIPAL, action: ACTION_1, subject: SUBJECT});
             });
         });
     });

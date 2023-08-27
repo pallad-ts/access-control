@@ -5,7 +5,8 @@
     "@pallad/scripts": "^3",
     "@types/jest": "^29.5.4",
     "barrelsby": "^2.8.0",
-    "lerna": "^7"
+    "lerna": "^7",
+    "conditional-type-checks": "^1.0.5"
   },
   "workspaces": [
     "packages/*"

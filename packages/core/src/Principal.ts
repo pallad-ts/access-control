@@ -7,16 +7,6 @@ export namespace Principal {
         }
     }
 
-    export class Account<T = any> {
-        constructor(readonly account: T) {
-
-        }
-
-        static is<T = any>(value: any): value is Account<T> {
-            return value instanceof Account;
-        }
-    }
-
     export class System {
         static INSTANCE = new System();
 

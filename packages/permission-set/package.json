@@ -19,7 +19,7 @@
     "directory": "packages/permission-set"
   },
   "dependencies": {
-    "@pallad/entity-ref": "^2.0.2"
+    "@pallad/entity-ref": "^2.1.0"
   },
   "peerDependencies": {
     "@pallad/access-control": "^1"
