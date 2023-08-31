@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expectPolicy policyToAllow fails if provided policy abstain from voting 1`] = `
+"Policy has abstained from voting for following access query:
+{"action": "foo_action", "principal": {"some": "principal"}, "subject": {"some": "subject"}}"
+`;
+
+exports[`expectPolicy policyToAllow fails if provided policy denies access for given query 1`] = `
+"expected to ALLOW for following combination:
+{"action": "foo_action", "principal": {"some": "principal"}, "subject": {"some": "subject"}}"
+`;
+
+exports[`expectPolicy policyToAllow fails if provided value is not a function 1`] = `"Policy must be a function"`;
+
+exports[`expectPolicy policyToDeny fails if provided policy abstain from voting 1`] = `
+"Policy has abstained from voting for following access query:
+{"action": "foo_action", "principal": {"some": "principal"}, "subject": {"some": "subject"}}"
+`;
+
+exports[`expectPolicy policyToDeny fails if provided policy allows access for given query 1`] = `
+"expected to DENY for following combination:
+{"action": "foo_action", "principal": {"some": "principal"}, "subject": {"some": "subject"}}"
+`;
+
+exports[`expectPolicy policyToDeny fails if provided value is not a function 1`] = `"Policy must be a function"`;

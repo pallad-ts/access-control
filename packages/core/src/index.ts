@@ -6,3 +6,4 @@ export * from "./AccessControl";
 export * from "./AccessDeniedError";
 export * from "./AccessQuery";
 export * from "./Policy";
+export * from "./Principal";

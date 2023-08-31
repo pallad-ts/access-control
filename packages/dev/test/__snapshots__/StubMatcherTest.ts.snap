@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StubMatcher defining action fails if action matcher is not defined 1`] = `"No action matcher defined. Define list of actions or use \`anyAction\` to match any action"`;
+
+exports[`StubMatcher defining principal fails if principal matcher is not defined 1`] = `"No principal matcher defined. Define list of principals or use \`anyParticipant\` to match any participant"`;
+
+exports[`StubMatcher defining subject fails if subject matcher is not defined 1`] = `"No subject matcher defined. Define list of subjects or use \`anySubject\` to match any subject"`;
+
+exports[`StubMatcher matching access query it is impossible to match access query if none of access query parts matcher is defined 1`] = `"No principal matcher defined. Define list of principals or use \`anyParticipant\` to match any participant"`;
