@@ -8,6 +8,9 @@
     "lerna": "^7",
     "conditional-type-checks": "^1.0.5"
   },
+  "scripts": {
+    "render-assets": "d2 --theme 4 -l elk --pad 0 *.d2"
+  },
   "workspaces": [
     "packages/*"
   ]

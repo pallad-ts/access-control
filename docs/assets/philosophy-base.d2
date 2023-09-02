@@ -1,0 +1,34 @@
+accessQuery: Access Query {
+  principal: principal:\nuser {
+    shape: person
+  }
+
+  action: action:\nedit
+
+  subject: subject:\narticle
+}
+
+engine: Pallad Access Control {
+  shape: diamond
+}
+decision: allow / deny
+
+engineContainer: "" {
+  policy1: Policy 1
+  policy2: Policy 2
+  policyN: Policy N
+}
+
+accessQuery -> engine
+
+engine -> engineContainer.policy1: Ask policies to vote
+engineContainer.policy1 -> engineContainer.policy2 -> engineContainer.policyN: {
+  style: {
+    stroke-dash: 3
+  }
+}
+engineContainer.policyN -> engine
+
+engine -> decision: Decision {
+  direction: right
+}
