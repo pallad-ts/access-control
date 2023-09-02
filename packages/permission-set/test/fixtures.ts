@@ -8,3 +8,6 @@ export const productFactory = createFactory('product', (id: string, organization
 export type ProductRef = ReturnType<typeof productFactory>;
 
 export const PRODUCT_REF = productFactory('productId', ORGANIZATION_REF.data.id);
+
+export const ACTION_CREATE = 'create' as const;
+export const ACTION_UPDATE = 'update' as const;

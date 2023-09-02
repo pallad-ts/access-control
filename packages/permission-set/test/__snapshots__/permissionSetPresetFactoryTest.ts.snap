@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`permissionSetPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 1`] = `
+{
+  "action": "delete",
+  "subject": {
+    "subjectType": "product",
+    "wrappedSubject": EntityRef {
+      "data": {
+        "id": "productId",
+        "organizationId": "organizationId",
+      },
+      "type": "product",
+    },
+  },
+}
+`;
+
+exports[`permissionSetPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 2`] = `
+{
+  "action": "create",
+  "subject": {
+    "subjectType": "product",
+    "wrappedSubject": EntityRef {
+      "data": {
+        "id": "organizationId",
+      },
+      "type": "organization",
+    },
+  },
+}
+`;
+
+exports[`permissionSetPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 3`] = `
+{
+  "action": "update",
+  "subject": {
+    "subjectType": "product",
+    "wrappedSubject": EntityRef {
+      "data": {
+        "id": "productId",
+        "organizationId": "organizationId",
+      },
+      "type": "product",
+    },
+  },
+}
+`;

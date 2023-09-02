@@ -3,4 +3,4 @@
  */
 
 export * from "./PermissionSet";
-export * from "./permissionSetFactory";
+export * from "./permissionSetPresetFactory";
