@@ -1,0 +1,68 @@
+---
+sidebar_position: 2
+title: Principal
+---
+
+As stated before `Principal` is an actor that interacts with the system.
+Logically speaking if your system can define only one principal then it does not need access control at all.
+
+Lets define examples of principals for inspiration. The more principals you've got the more control you get.
+
+## Anonymous
+
+Represents an actor that makes unauthenticated interaction with your system.
+
+`@pallad/access-control` defines it as `Principal.Anonymous`.
+```typescript
+export class Anonymous extends new TypeCheck<Anonymous>('@pallad/access-control/Principal/Anonymous').clazz {
+	readonly kind = 'principal';
+	readonly type = 'anonymous'
+	static INSTANCE = new Anonymous();
+}
+```
+
+## System
+
+Indicates that system itself performs an action. Might be used to effectively "turn off" access control since we would like to allow system to do almost everything.
+
+Example of actions that might be restricted only to system:
+* Truncate database storage
+* Getting data bypassing tenancy checks
+
+## User
+
+Represents authenticated user.
+
+`@pallad/access-control` does not defines such participant as the shape of authenticates users data is so different among the systems therefore to avoid confusion it was not added.
+
+Example `User` principal just for sake of inspiration
+```typescript
+
+export class User {
+	readonly kind = 'principal';
+	readonly type = 'user'
+
+	constructor(
+        readonly id: string, // just user id
+		readonly workspaceId: string // workspaceID - very helpful for tenancy checks
+	) {
+
+	}
+}
+```
+
+## ImpersonatedUser
+
+Describes an actor that impersonates as given user. For example administrator might have an ability to "log in" as John Smith and perform some actions on his behalf.
+Having this type of participant allows you to limit area of possible actions for impersonated users.
+
+For example impersonated user:
+* cannot remove account since it is too dangerous action
+* cannot mark notifications, messages as read (very cool feature)
+
+## API
+
+Principal to describe that interaction is made via API.
+Having such principal seems unnecessary at first glance since all available actions are already exposed as API endpoints.
+
+Actually it isn't a stupid idea. See about access control on endpoint level is a bad pattern// TODO

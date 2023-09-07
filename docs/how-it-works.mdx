@@ -1,8 +1,10 @@
 ---
-sidebar_position: 2
-slug: / 
-title: Philosophy
+sidebar_position: 5
+slug: /how-it-works
+title: How it works
 ---
+
+import Philosophy from './assets/philosophy.svg';
 
 In order to understand the philosophy behind Pallad's Access Control we need to explain terms used.
 
@@ -17,10 +19,12 @@ Policy might:
 - _allow_ access by returning `true`
 - _deny_ access by returning `false`
 
-**Access Control** - Contains policies and ask them to vote on access query. 
+**Access Control** - Contains policies and ask them to vote on access query.
 
 Final decision is made based on following criteria:
 - once all policies _abstain_ from voting then final decision is `deny`
 - once any policy denies access then final decision is `deny`
 - once at least one policy votes to allow access and there are no _deny_ votes then final decision is `allow`
 
+The entire philosophy could also be described in one picture:
+<Philosophy/>

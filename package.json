@@ -12,6 +12,7 @@
     "render-assets": "d2 --theme 4 -l elk --pad 0 *.d2"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ]
 }

@@ -1,0 +1,27 @@
+---
+sidebar_position: 10
+title: Subject
+---
+
+Represents entity, target, resource on which `action` has to be performed.
+
+Let's discuss few possible example how to define it, and how detailed it has to be.
+
+## String
+
+Just a string representing type of the subject.
+```typescript
+export type Subject = 'article' | 'author' | 'category';
+```
+
+This can work only for very simple systems, without need for tenancy or more granular control.
+
+## EntityRef
+
+
+
+## Custom
+
+## PermissionSet
+// TODO
+// Talks about tenancy

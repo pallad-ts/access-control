@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`PermissionSet defining subject invalid subject definition 1`] = `"Invalid subject definition provided. Only EntityRefFactory, class or predicate function allowed"`;

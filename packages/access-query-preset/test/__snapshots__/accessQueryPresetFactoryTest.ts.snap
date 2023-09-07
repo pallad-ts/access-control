@@ -1,8 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`permissionSetPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 1`] = `
+exports[`accessQueryPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 1`] = `
 {
   "action": "delete",
+  "principal": {
+    "some": "principal",
+  },
   "subject": {
     "subjectType": "product",
     "wrappedSubject": EntityRef {
@@ -16,9 +19,12 @@ exports[`permissionSetPresetFactory provided methods are assigned to final objec
 }
 `;
 
-exports[`permissionSetPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 2`] = `
+exports[`accessQueryPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 2`] = `
 {
   "action": "create",
+  "principal": {
+    "some": "principal",
+  },
   "subject": {
     "subjectType": "product",
     "wrappedSubject": EntityRef {
@@ -31,9 +37,12 @@ exports[`permissionSetPresetFactory provided methods are assigned to final objec
 }
 `;
 
-exports[`permissionSetPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 3`] = `
+exports[`accessQueryPresetFactory provided methods are assigned to final object and those methods return access control query params with action and subject 3`] = `
 {
   "action": "update",
+  "principal": {
+    "some": "principal",
+  },
   "subject": {
     "subjectType": "product",
     "wrappedSubject": EntityRef {

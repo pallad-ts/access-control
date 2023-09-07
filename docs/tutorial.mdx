@@ -1,0 +1,241 @@
+---
+sidebar_position: 10
+slug: /tutorial
+title: Tutorial
+---
+
+:::tip
+
+In order to better understand example please read [how it works](/how-it-works) document first.
+
+:::
+
+Lets create a simple access control system that is responsible of permissions application for articles.
+
+Access control rules we want to implement:
+* Anonymous user can read only published articles.
+* Only logged-in user can create, edit, delete, publish articles
+
+## Defining access query params
+
+### Principal
+
+Based on the rules we've found that there are only 2 actors that system has to handle:
+- `logged-in` user - represented by `logged-in` string
+- `anonymous` user - or in other words not logged-in user - represented by built-in `Anonymous` principal
+
+Lets represent them in the code
+```typescript
+import {Principal as _Principal} from '@pallad/access-control';
+
+export type Principal = 'logged-in' | _Principal.Anonymous // Anonymous is already defined in @pallad/access-control
+```
+
+### Obtaining principal
+Principal is a person (or in other words `actor`) that interacts with the system.
+
+Anonymous user is the one that we usually know nothing about.
+
+`logged-in` user is a person that can authenticate itself.
+Usually it happens through login form.
+Once user is logged then we set a cookie in the browser,
+return JWT token or use any other kind of mechanism to provide a way to authenticate further access to the system.
+
+In order to identify that user is logged in we need to ask authentication system whether request is authenticated.
+The security of entire access control system relies on this particular point the most.
+Once authentication system is insecure your entire access control becomes insecure also.
+
+For sake of tutorial here is simplified way to obtain principal for access control.
+In real-life application you will need more sophisticated methods to obtain principals.
+```typescript
+import {Principal as _Principal} from '@pallad/access-control';
+
+function getPrincipalFromRequest(req: express.Request): Principal {
+	// Just for tutorial purposes!
+	// Obviously very insecure way to identify principal
+	// Never use it in real life application
+	if (req.headers.authorization === 'itsme') {
+		return 'logged-in';
+	}
+	return _Principal.Anonymous.INSTANCE;
+}
+```
+
+### Action
+Action is just a string that indicates actions possible in our access control system.
+
+```typescript
+export type Action = 'read' | 'read-draft' | 'create' | 'update' | 'delete' | 'publish';
+```
+
+### Subject
+
+Subject defines possible subjects on which we want to perform actions. Since we're handling only articles then one entry in union type is needed.
+```typescript
+export type Subject = 'article';
+```
+
+## Defining policies
+
+From [previous chapter](/how-it-works) we know that `Policy` is a function that gets `AccessQuery` object as an argument and based on it makes a vote.
+
+Let's define `AccessControl` object so we can register policies in it.
+
+```typescript
+import {AccessControl} from '@pallad/access-control';
+import {Principal, Action, Subject} from './AccessQueryElements';
+
+export const accessControl = new AccessControl<Principal, Action, Subject>(); // uses types defined above
+```
+
+Now we can register our policy. This one will handle only anonymous users and allows only for `read` action on subject `article`
+```typescript
+import {Principal as _Principal} from '@pallad/access-control';
+accessControl
+	.registerPolicy(({action, subject, principal}) => {
+		if (_Principal.Anonymous.is(principal)) {
+			return action === 'read' && subject === 'article';
+		}
+	})
+```
+
+Time to take care of logged in users.
+```typescript
+import {Action} from './AccessQueryElements';
+const allowedActionsForArticle = new Set<Action>([
+	'update',
+	'read',
+	'read-draft',
+	'create',
+	'publish',
+	'delete'
+]);
+
+accessControl
+	.registerPolicy(({action, subject, principal}) => {
+		if (principal === 'logged-in') {
+			return allowedActionsForArticle.has(action) && subject === 'article';
+		}
+	});
+```
+
+Note that we've defined set of allowed actions for articles and test whether `action` is defined in the `Set` of actions for `article`.
+
+This is a good idea to prevent accidentally allowing actions that might be added in the future but should not be necessarily available for subject of articles.
+There is better way to handle that with `@pallad/access-control` but for sake of tutorial it is easier to understand it that way.
+
+## Usage
+
+The simplest way to use access control is to call it directly:
+```typescript
+if (
+	await accessControl.isAllowed({
+		action: 'read',
+		subject: 'article',
+		principal: principal
+	})
+) {
+  // access allowed
+} else {
+  // access denied
+}
+```
+
+Or throwing `AccessDeniedError` automatically when access is denied
+```typescript
+await accessControl.assertIsAllowed({
+	action: 'read',
+	subject: 'article',
+	principal: principal
+});
+```
+
+### Usage with express
+
+Just call it from middleware
+
+```typescript
+import wrapAsync = require('express-async-handler');
+app.use('/articles', asyncWrapp(async(req, res) => {
+    await accessControl.assertIsAllowed({
+		action: 'read',
+		subject: 'article',
+		principal: principal
+	});
+    // return list of articles
+}))
+```
+
+Another way is to create middleware factory that asserts permissions and allows another middlewares to handle rest of the logic of the endpoint.
+```typescript
+import {Action, Subject} from "./AccessQueryElements";
+
+function requireAccess(action: Action, subject: Subject): express.RequestHandler {
+	return (req, res, next) => {
+		accessControl.assertIsAllowed({
+			action,
+			subject,
+			principal: getPrincipalFromRequest(req)
+		})
+			.then(() => {
+				next();
+			}, next);
+	}
+}
+
+app.post('/articles',
+	requireAccess('create', 'article'),
+	(req, res) => {
+		// you can safely handle article creation
+	}
+);
+```
+
+### Usage with Service Layer
+
+Service Layer is a pretty well known in IT an architectural pattern. You can read about it more:
+
+- https://en.wikipedia.org/wiki/Service_layer_pattern
+- https://java-design-patterns.com/patterns/service-layer/
+
+Controlling access in service layer is very easy and recommended way.
+
+All we need to do is to pass principal to every service method that is suppose to perform some access control checks.
+Service should be able to define rest of access query parameters like `action` and `subject`
+```typescript
+export class ArticleService {
+	constructor(private accessControl: OurAccessControl, private articleRepository: ArticleRepository) {
+	}
+
+	async findAll(principal: Principal) {
+        // throws an error once access is denied
+		await this.accessControl.assertIsAllowed({
+			action: 'read',
+			subject: 'article',
+			principal
+		});
+
+        // does not throw an error, just checks whether access is allowed
+		const canReadDraft = await this.accessControl.isAllowed({
+			action: 'read-draft',
+			subject: 'article',
+			principal
+		})
+
+		return this.articleRepository.findAll({
+			onlyPublished: !canReadDraft
+		})
+	}
+
+	async create(principal: Principal, input: Article.Input) {
+		await this.accessControl.assertIsAllowed({
+			action: 'create',
+			principal,
+			subject: 'article'
+		});
+
+		return this.articleRepository.create(input);
+	}
+}
+```
+

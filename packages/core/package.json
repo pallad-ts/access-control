@@ -22,5 +22,8 @@
   "license": "MIT",
   "peerDependencies": {
     "tslib": "^2"
+  },
+  "dependencies": {
+    "@pallad/type-check": "^1.2.0"
   }
 }

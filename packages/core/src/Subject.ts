@@ -1,14 +1,14 @@
-export namespace Subject {
-    /**
-     * Global subject representation.
-     * It is sometimes useful to indicate that operation is performed on whole system.
-     */
-    export class Global {
-        readonly type = 'global-subject';
-        static INSTANCE = new Global();
+import {TypeCheck} from "@pallad/type-check";
 
-        static is(value: unknown): value is Global {
-            return value instanceof Global;
-        }
-    }
+export namespace Subject {
+	/**
+	 * Representation of global subject.
+	 * It is sometimes useful to indicate that operation is performed on whole system.
+	 */
+	export class Global extends new TypeCheck<Global>('@pallad/access-control/Subject/Global').clazz {
+		readonly kind = 'subject';
+		readonly type = 'global';
+
+		static INSTANCE = new Global();
+	}
 }

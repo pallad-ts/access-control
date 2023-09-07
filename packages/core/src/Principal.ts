@@ -1,17 +1,16 @@
-export namespace Principal {
-	export class Anonymous {
-		static INSTANCE = new Anonymous();
+import {TypeCheck} from "@pallad/type-check";
 
-		static is(value: any): value is Anonymous {
-			return value instanceof Anonymous;
-		}
+export namespace Principal {
+	export class Anonymous extends new TypeCheck<Anonymous>('@pallad/access-control/Principal/Anonymous').clazz {
+		readonly kind = 'principal';
+		readonly type = 'anonymous'
+		static INSTANCE = new Anonymous();
 	}
 
-	export class System {
-		static INSTANCE = new System();
+	export class System extends new TypeCheck<System>('@pallad/access-control/Principal/System').clazz {
+		readonly kind = 'principal';
+		readonly type = 'system';
 
-		static is(value: any): value is System {
-			return value instanceof System;
-		}
+		static INSTANCE = new System();
 	}
 }

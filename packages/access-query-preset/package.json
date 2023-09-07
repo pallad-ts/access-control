@@ -1,5 +1,5 @@
 {
-  "name": "@pallad/access-control-permission-set",
+  "name": "@pallad/access-control-query-preset",
   "version": "1.0.0",
   "description": "",
   "main": "compiled/index.js",

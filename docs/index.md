@@ -28,5 +28,5 @@ Since `@pallad/access-control` is not based on any framen
 * 👷 Built with Typescript
 * 👌 Supports synchronous and asynchronous policies
 * 🎒 Helpful tools for writing unit tests
-* ✅ Easy to use with any framework or library
+* ✅ Easy to use with any framework (express, nest.js, fastify, koa, graphql)
 * 🧑‍🤝‍🧑 Type friendly
