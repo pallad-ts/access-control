@@ -1,0 +1,139 @@
+---
+sidebar_position: 15
+title: Access Query Preset
+---
+
+Once you have defined possible options for subject and action you might realize that certain combinations of them should not be possible.
+For example you don't have action `truncate` on subject `article`.
+Therefore policies needs to be aware of that and filter out unsupported actions for certain subjects.
+
+That is why in tutorial we've explicitly defined set of possible actions and filter out unsupported ones:
+
+```typescript
+import {Action} from './AccessQueryElements';
+const allowedActionsForArticle = new Set<Action>([
+	'update',
+	'read',
+	'read-draft',
+	'create',
+	'publish',
+	'delete'
+]);
+
+accessControl
+	.registerPolicy(({action, subject, principal}) => {
+		if (principal === 'logged-in') {
+            // This is annooooyiiiing 😫😫😫
+			return allowedActionsForArticle.has(action) && subject === 'article';
+		}
+	});
+```
+
+It is cumbersome and requires extra maintenance. There is better solution though.
+
+Access Query Preset
+
+Access Query Preset is available as separate package `@pallad/access-control-query-preset`.
+```bash npm2yarn
+npm install @pallad/access-control-query-preset
+```
+
+## What is it
+
+Access Query Preset allows to define combination of `action` and `subject`.
+```typescript
+import {accessQueryPresetFactory} from "@pallad/access-control-query-preset";
+const accessQueryPreset = accessQueryPresetFactory('article', create => ({
+    // can principal read given article?
+    canRead: create('read', Subject.Article),
+	// can principal create article withing given workspace?
+	canCreate: create('create', Subject.Workspace)
+}));
+```
+
+Now you can create access query from it
+```typescript
+
+const accessQuery = accessQueryPreset.canRead(
+	Subject.Article(1, 1),
+	principal
+);
+
+accessControl.isAllowed(accessQuery)
+```
+
+Since preset aggregates all possible combinations of actions and subjects it can wrap
+your policy function so it is never called for combinations that are not possible.
+
+```typescript
+accessControl.registerPolicy(
+	accessQueryPreset.createPolicy(() => {
+        console.log('policy called');
+	})
+)
+
+// your policy will not be called since access query preset filtered out that access query for you
+accessControl.isAllowed({action: 'random-one', subject: {}, principal: {}})
+
+// `policy called`
+accessControl.isAllowed(
+    accessQueryPreset.canRead(
+		Subject.Article(1, 1),
+		principal
+	)
+);
+
+```
+
+Also maintains type safety!
+```typescript
+accessQueryPreset.createPolicy(({action, subject}) => {
+	if (action === 'create') {
+        // at this stage typescript knows that subject is `Subject.Workspace`
+	} else {
+        // at this stage typescript knows that subject is `Subject.Article`
+	}
+})
+```
+
+## Maintaining uniqueness
+
+When your system gets more access query presets defined you might noticed that certain combinations of `action` and `subject` are not unique.
+
+```typescript
+const articleQueryPreset = accessQueryPresetFactory('article', c => ({
+	canCreate: c('create', Subject.Workspace)
+}));
+
+const articleCategoryQueryPreset = accessQueryPresetFactory('article-category', c => ({
+	// exactly same combination as above
+	canCreate: c('create', Subject.Workspace)
+}));
+```
+
+This might suggest that policy created from `articleQueryPreset` might be called even we create access query from `articleCategoryQueryPreset`.
+```typescript
+accessControl
+	.registerPolicy(
+		articleQueryPreset.createPolicy(() => {
+			console.log('Article Query Preset Policy called');
+		})
+	)
+	.registerPolicy(
+		articleCategoryQueryPreset.createPolicy(() => {
+			console.log('Article Category Query Preset Policy called');
+		})
+	)
+```
+
+That is not the case actually
+```typescript
+accessControl.isAllowed(articleQueryPreset.canCreate(Subject.Workspace(1), principal));
+// 'Article Query Preset Policy called'
+// note that second policy was not called
+```
+
+This is because `AccessQueryPreset` do extra wrapping of a subject
+with another object with `subjectType` property that allows to identify all queries from Access Query Preset.
+
+That being said `AccessQueryPreset` should

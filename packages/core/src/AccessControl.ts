@@ -3,14 +3,14 @@ import {AccessDeniedError} from "./AccessDeniedError";
 import {AccessQuery} from "./AccessQuery";
 
 export class AccessControl<TPrincipal = unknown, TAction extends string = string, TSubject = unknown> {
-	private policies = new Set<Policy<AccessQuery<TPrincipal, TAction, TSubject>>>();
+	private policies = new Set<Policy<any>>();
 
-	registerPolicy(policy: Policy<AccessQuery<TPrincipal, TAction, TSubject>>): this {
+	registerPolicy<TAccessQuery extends AccessQuery<TPrincipal, TAction, TSubject>>(policy: Policy<TAccessQuery>): this {
 		this.policies.add(policy);
 		return this;
 	}
 
-	deregisterRule(policy: Policy<AccessQuery<TPrincipal, TAction, TSubject>>): this {
+	deregisterRule<TAccessQuery extends AccessQuery<TPrincipal, TAction, TSubject>>(policy: Policy<TAccessQuery>): this {
 		this.policies.delete(policy);
 		return this;
 	}

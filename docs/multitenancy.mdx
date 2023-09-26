@@ -1,0 +1,192 @@
+---
+sidebar_position: 15
+title: Multitenancy
+---
+
+Multitenancy is more complex problem for access control than system without it.
+That is even more complex problem once advanced multitenancy model is involved.
+
+This article show basic implementation of access control of multitenancy system where data belongs to workspaces.
+An user belongs to a single workspace, and we want to ensure that the user operates within its own workspace.
+
+## Access Control Elements
+
+System supports following principals:
+* `anonymous`
+* `authenticated`
+* `impersonated` - when admin user impersonates as someone else
+
+This could be represented by following structures.
+```typescript
+import {Principal as _Principal} from '@pallad/access-control';
+
+export type Principal = Principal.ImpersonatedUser | Principal.User | _Principal.Anonymous;
+export namespace Principal {
+	export class User {
+		readonly kind = 'principal';
+		readonly type = 'user';
+
+		constructor(readonly id: number, readonly workspaceId: number) {
+			Object.freeze(this);
+		}
+	}
+
+	export class ImpersonatedUser {
+		readonly kind = 'principal';
+		readonly type = 'impersonated-user';
+
+		constructor(readonly impersonatorUsername: string, readonly targetUser: User) {
+			Object.freeze(this);
+		}
+	}
+}
+```
+
+Now we need to represent subjects and we're going to use [`@pallad/entity-ref`](https://github.com/pallad-ts/entity-ref) for it.
+```typescript
+import {createFactory} from "@pallad/entity-ref";
+export namespace Subject {
+	export const Article = createFactory(
+		'article',
+		(id: number, workspaceId: number) => ({id, workspaceId})
+	);
+
+	export const Workspace = createFactory(
+		'workspace',
+		(id: number) => ({id})
+	);
+}
+```
+
+## Policy
+
+For policy definition we're going to use `createPolicy` from `AccessQueryPreset` for better type hints and filtering out all queries we do not care about.
+```typescript
+import {AccessControl} from '@pallad/access-control';
+import {AccessQueryPreset, Principal, Subject} from './AccessQuery';
+
+const accessControl = new AccessControl();
+accessControl.registerPolicy(
+	AccessQueryPreset
+		.Article
+		.accessQueryPreset
+		.createPolicy(({action, subject, principal}) => {
+            // everyone can read
+			if (action === 'read') {
+				return true;
+			}
+
+			// for impersonated and authenticated user allow only if actions are run against same workspace
+			const workspaceId = Subject.Workspace.is(subject) ? subject.data.id : subject.data.workspaceId;
+			if (principal instanceof Principal.ImpersonatedUser) {
+				// and impersonated user can't publish
+				return workspaceId === principal.targetUser.workspaceId && action !== 'publish';
+			} else if (principal instanceof Principal.User) {
+				return workspaceId === principal.workspaceId;
+			}
+		})
+)
+```
+
+## Service
+
+According to [good practices](/access-control/good-practices) we're no longer using access control checks at endpoint level but moving them to service.
+
+Truncating for brevity - [full code available here](https://github.com/pallad-ts/access-control/tree/master/examples/tenancy/src/ArticleService.ts).
+
+```typescript
+export class ArticleService {
+	constructor(private accessControl: AccessControl,
+				private aclHelper: ACLHelper,
+				private articleRepository: ArticleRepository) {
+	}
+
+	async findAll(principal: Principal) {
+		const scope = this.aclHelper.assertScopeWorkspaceForPrincipal(principal);
+		const subject = Subject.Workspace.fromScope(scope);
+		await this.accessControl.assertIsAllowed(
+			AccessQueryPreset.Article.canRead(subject, principal)
+		);
+
+		const canReadDraft = await this.accessControl.isAllowed(
+			AccessQueryPreset.Article.canReadDraft(subject, principal)
+		);
+
+		return this.articleRepository.findAll(scope, {
+			onlyPublished: !canReadDraft
+		})
+	}
+
+	async create(principal: Principal, input: Article.Input) {
+		const scope = this.aclHelper.assertScopeWorkspaceForPrincipal(principal);
+		const subject = Subject.Workspace.fromScope(scope);
+		await this.accessControl.assertIsAllowed(
+			AccessQueryPreset.Article.canCreate(subject, principal)
+		);
+		return this.articleRepository.create(scope, input);
+	}
+
+	async update(principal: Principal, id: number, input: Article.Input) {
+		const scope = this.aclHelper.assertScopeWorkspaceForPrincipal(principal);
+
+		const article = this.articleRepository.assertById(scope, id);
+		await this.accessControl.assertIsAllowed(
+			AccessQueryPreset.Article.canUpdate(Subject.Article.fromEntity(article), principal)
+		);
+
+		return this.articleRepository.update(scope, id, input);
+	}
+}
+
+```
+
+## Repository scopes
+You might notice the concept of `scope`.
+
+Scope is a note for repository to filter out all records outside of tenancy scope.
+For example passing `new ScopeWorkspace(1)` is telling repository to operate only on records from `workspaceId = 1`.
+
+Think about it:
+* You can try to find article by id from other workspace but scope will filter it out.
+* You can try to update someone else article but again - scope will filter it out
+
+Scope should be obtained based on principal and if that is not possible it might suggest the operation should not be available for given principal.
+
+### Unsafe global scope
+Example repository contains example of `ScopeUnsafeGlobal`
+```typescript
+export class ScopeUnsafeGlobal {
+	readonly kind = 'scope';
+
+	readonly type = 'unsafe-global';
+	static INSTANCE = new ScopeUnsafeGlobal();
+
+	constructor() {
+		Object.freeze(this);
+	}
+}
+```
+
+This kind of scope should be used in rare cases where repository **should not** filter out records but rather allow to work on all of them.
+
+You might ask - why?
+
+Why not making scope optional?
+```typescript
+class ArticleRepository {
+	delete(scope: ScopeWorkspace | undefined, id: number) {
+
+	}
+}
+```
+
+Due to reasons...
+* to avoid potential mistakes (scope not obtained correctly?)
+* to give a reminder for developer that it is dangerous operation
+
+Calling `articleRepository.delete(undefined, 1)` comes too easy but
+`articleRepository.delete(ScopeUnsafeGlobal.INSTANCE, 1)` gives necessary hint that you need to think twice before committing it.
+
+## Testing
+
+Matrix testing? Anyone? Here is the [example]((https://github.com/pallad-ts/access-control/tree/master/examples/tenancy/test/AccessControlArticlesTest.ts))

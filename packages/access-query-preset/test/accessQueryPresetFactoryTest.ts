@@ -1,4 +1,3 @@
-import {createFactory} from "@pallad/entity-ref";
 import {accessQueryPresetFactory} from "@src/accessQueryPresetFactory";
 import {IsExact, assert} from "conditional-type-checks";
 import {AccessQueryPreset} from "@src/AccessQueryPreset";
@@ -8,15 +7,15 @@ import {PRINCIPAL} from "@pallad/access-control-dev/test/fixtures";
 
 describe('accessQueryPresetFactory', () => {
 	const FOO_BAR = {foo: 'bar'} as const;
-	const factory = accessQueryPresetFactory('product', {
-		canUpdate: ['update', productFactory] as const,
-		canDelete: ['delete', productFactory] as const,
-		canCreate: ['create', organizationFactory] as const,
-		canTruncate: ['truncate', Subject.Global] as const,
-		canActivate: ['activate', (value: unknown): value is typeof FOO_BAR => {
+	const factory = accessQueryPresetFactory('product', c => ({
+		canUpdate: c('update', productFactory),
+		canDelete: c('delete', productFactory),
+		canCreate: c('create', organizationFactory),
+		canTruncate: c('truncate', Subject.Global),
+		canActivate: c('activate', (value: unknown): value is typeof FOO_BAR => {
 			return value === FOO_BAR;
-		}] as const
-	});
+		})
+	}));
 
 	it('provided methods are assigned to final object and those methods return access control query params with action and subject', () => {
 		expect(factory.canDelete(PRODUCT_REF, PRINCIPAL))

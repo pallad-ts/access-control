@@ -32,7 +32,7 @@ export type Principal = 'logged-in' | _Principal.Anonymous // Anonymous is alrea
 ```
 
 ### Obtaining principal
-Principal is a person (or in other words `actor`) that interacts with the system.
+Principal is a person or something else that interacts with the system.
 
 Anonymous user is the one that we usually know nothing about.
 
@@ -48,7 +48,8 @@ Once authentication system is insecure your entire access control becomes insecu
 For sake of tutorial here is simplified way to obtain principal for access control.
 In real-life application you will need more sophisticated methods to obtain principals.
 ```typescript
-import {Principal as _Principal} from '@pallad/access-control';
+import {BasicPrincipal} from '@pallad/access-control';
+import {Principal} from './AccessQueryElements.ts';
 
 function getPrincipalFromRequest(req: express.Request): Principal {
 	// Just for tutorial purposes!
@@ -57,7 +58,7 @@ function getPrincipalFromRequest(req: express.Request): Principal {
 	if (req.headers.authorization === 'itsme') {
 		return 'logged-in';
 	}
-	return _Principal.Anonymous.INSTANCE;
+	return BasicPrincipal.Anonymous.INSTANCE;
 }
 ```
 

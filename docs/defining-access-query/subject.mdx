@@ -17,11 +17,91 @@ export type Subject = 'article' | 'author' | 'category';
 This can work only for very simple systems, without need for tenancy or more granular control.
 
 ## EntityRef
+For complex systems you will need to use real entities within access control.
+
+Having entity as a pure object seems to be a great idea but soon you realize that has its own problems.
+Lets use following entity as an example.
+
+```typescript
+const article = {
+    id: 1,
+	title: 'Cillum exercitation occaecat duis id sunt ad irure veniam qui',
+	content: "Dolor labore dolor, laboris occaecat aute culpa.",
+	isPublished: true
+};
+```
+
+How are you going to assess on `policy` level that subject is an article?
+You can check for existence of `isPublished` property but for complex systems it is hard to maintain all
+that kind of checks and maintaining them to be mutually exclusive.
+
+Once another entity with `isPublished` property gets added to the system yoo won't realize that currently existing policy will take-over handling of access control it.
+
+In theory you can just create a class and use it for identification:
+
+```typescript
+class Article {
+	readonly id: number;
+    readonly title: string;
+    readonly content: string;
+    readonly isPublished: boolean;
+    constructor(data: Article) {
+		Object.assign(this, data);
+		Object.freeze(this);
+	}
+}
+
+const article = new Article({
+    id: 1,
+	title: 'Cillum exercitation occaecat duis id sunt ad irure veniam qui',
+	content: "Dolor labore dolor, laboris occaecat aute culpa.",
+	isPublished: true
+});
 
 
+accessControl.registerPolicy(({action, principal, subject}) => {
+    if (subject instanceof Article) {
+        // assess access for Article subject
+    }
+})
+```
+
+We have solved problem of identifying subject at policy level. Much better but still has some problems.
+
+Creating full entity object is not always possible and sometimes even too expensive.
+Passing excess data (like title, content) to subject is also not needed for a policy to assess access.
+This is especially true for systems where you need to send subject over the network to another system.
+
+To solve that problem we have [entity-ref](https://github.com/pallad-ts/entity-ref).
+It was designed, to create unambiguous, lightweight data structure that is easy to serialize, check type and ensure shape of data.
+
+Thanks to it you can create set of factories to make creating entity-ref easier.
+
+```typescript
+import {createFactory} from '@pallad/entity-ref';
+
+export const articleRefFactory = createFactory(
+    'article', // uses `article` to uniquely identify type
+	(id: string) => ({id}) // factory that defines shape of data for ref
+);
+
+
+// create lightweight ref object for an article with id `10`
+const ref = articleRefFactory('10'); // {type: "article", data: {id: "10"}}
+
+accessControl.registerPolicy(({action, principal, subject}) => {
+    if (articleRefFactory.is(subject)) {
+        // assess access for article
+    }
+})
+```
+
+For more information about entity-ref see [documentation](https://github.com/pallad-ts/entity-ref/tree/master).
+
+## AccessQueryPreset
+
+[Access Query Preset](/defining-access-query/access-query-preset) creates its own subject wrapper to ensure policies created from the preset will handle only access queries created from it.
+That is highly recommended approach since it significantly simplifies policy management and ensure the handling of of access queries between policies will not overlap.
 
 ## Custom
-
-## PermissionSet
-// TODO
-// Talks about tenancy
+Similarly to principal, listing all possibilities is not feasible therefore you should not hesitate to create your own type of principal or extend existing ones.

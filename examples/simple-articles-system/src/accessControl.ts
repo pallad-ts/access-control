@@ -1,4 +1,4 @@
-import {AccessControl, Principal as _Principal, Subject as _Subject} from "@pallad/access-control";
+import {AccessControl, BasicPrincipal} from "@pallad/access-control";
 import {Principal, Action, Subject} from './AccessQueryElements';
 
 export const accessControl = new AccessControl<Principal, Action, Subject>();
@@ -14,7 +14,7 @@ const allowedActionsForArticle = new Set<Action>([
 
 accessControl
 	.registerPolicy(({action, subject, principal}) => {
-		if (_Principal.Anonymous.is(principal)) {
+		if (BasicPrincipal.Anonymous.isType(principal)) {
 			// allow to read if subject is `article`
 			return action === 'read' && subject === 'article';
 		}

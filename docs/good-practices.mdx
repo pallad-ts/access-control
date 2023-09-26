@@ -6,3 +6,75 @@ title: Good practices
 
 ## Access Control on endpoint is usually a bad pattern
 
+A common practice (available even in [basic tutorial](https://github.com/pallad-ts/access-control/tree/master/examples/simple-articles-system))
+among developers is applying access control checks at endpoint level.
+
+```typescript
+app.post(
+	'/articles/:id/publish',
+	requireAccess('publish', 'article'), // this denies access to endpoint without permissions
+	(req, res) => {
+		res.json(
+			articleRepository.publish(
+				getArticleIdFromRequest(req),
+			)
+		)
+	}
+);
+```
+
+While it seems to be logical it doesn't scale well.
+
+Imagine following example.
+
+You need to generate a report of comments under articles.
+The report contains such information like:
+* article data
+* comment data
+* author data
+* maybe some moderator notes to comments?
+
+You are you going to define a single (or even multiple) permissions for it an endpoint?
+
+You can do
+```typescript
+requireAccess('read', 'article')
+	AND requireAccess('read', 'comment')
+	AND requireAccess('read', 'comment-author') // etc
+```
+but that is fragile and whenever next person needs to modify the report (removing or adding new piece of data)
+will surely forget about changing endpoint permissions for it.
+
+You can introduce special `action` like `read-report`
+```typescript
+requireAccess('read-report', 'article')
+```
+but that doesn't take into account handling of permissions to comments, authors etc.
+
+Ok - you might say - ignore them. Let's just access those data without any access control.
+
+Well. That is totally unsafe and exposes you to a risk of disclosing potentially fragile data.
+
+Solution?
+
+Don't do access control on endpoint level but always on service level.
+
+Service should be always responsible for making sure that current principal has sufficient permissions to access data.
+
+Example:
+* `ArticleService.findByQuery` that assess whether principal can read articles
+* `CommentService.findByQuery` that assess whether principal can read comments
+* `CommentAuthorService.findByQuery` that assess whether principal can read comment authors
+* `CommentAuthorNotesServices.findByQuery` that assess whether principal can read notes about comment authors
+
+That way it is guaranteed that no data leaks without proper permissions.
+
+## Use `AccessQueryPreset` to define access queries for domain
+
+`AccessQueryPreset` is great for:
+* Defining set of possible access queries for domain
+* Creating policies for them
+* Ensuring type safety
+
+[More on that](/defining-access-query/access-query-preset)
+

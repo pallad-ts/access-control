@@ -4,18 +4,18 @@ title: General rules
 ---
 
 It is crucial to be able to define good, unambiguous parameters for access query.
-Thanks for them Access Control might as granular as you need and properly do its job.
+Thanks for them Access Control might be as granular as you need and properly do its job without a lot of maintenance.
 
 It is impossible to define all kind of principals, actions and subjects within a single package.
-Therefore, you should be creating as many options to define access query elements as you need.
+Therefore, you should be creating as many options to define access query elements as needed.
 
 :::tip
 
-The elements of Access Query **must** contain as many details as you need to perform checks on a policy level.
+The elements of Access Query **must** contain as many details as you need to perform checks on a policy level or policy **must** be able to retrieve that information
 
 :::
 
-For example, based on the [tutorial](/tutorial) it is impossible to define access control policies based on IP address of the request.
+For example, based on the [tutorial](/tutorial) it is impossible to define access control policies based on IP address of the request. There is no such information in the query and Access Control Policy is not able to retrieve it somehow.
 
 In order to achieve that you must inject that information to `Principal` somehow.
 
@@ -35,7 +35,6 @@ export interface Principal {
 
 The way of obtaining principal also changes
 ```typescript
-
 function getWrappedPrincipalFromRequest(req: express.Request): Principal {
 	if (req.headers.authorization === 'itsme') {
 		return 'logged-in';
@@ -58,8 +57,11 @@ Example policy
 accessControl
 	.registerPolicy(({action, subject, principal}) => {
         // anonymous user from private IP address class can read articles
-		if (_Principal.Anonymous.is(principal.wrapped) && principal.meta.ipAddress.startsWith('10.0.0.')) {
+		if (_Principal.Anonymous.isType(principal.wrapped) && principal.meta.ipAddress.startsWith('10.0.0.')) {
 			return action === 'read' && subject === 'article';
 		}
 	})
 ```
+
+The same rule applies to subject.
+If you need tenancy control you might need to include that information

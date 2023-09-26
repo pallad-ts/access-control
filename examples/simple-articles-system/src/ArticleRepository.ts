@@ -35,19 +35,24 @@ export class ArticleRepository {
 	}
 
 	create(input: Article.Input) {
-		articles.push({
+		const newArticle = {
 			id: articleId++,
 			...input,
 			isPublished: false
-		});
-		return input;
+		};
+		articles.push(newArticle);
+		return newArticle;
 	}
 
 	update(id: number, input: Article.Input) {
 		const article = this.findById(id);
 		if (article) {
-			article.title = input.title;
-			article.content = input.content;
+			if (input.title) {
+				article.title = input.title;
+			}
+			if (input.content) {
+				article.content = input.content;
+			}
 		}
 		return article;
 	}

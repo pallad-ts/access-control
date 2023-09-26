@@ -35,14 +35,14 @@ export class ArticleService {
 		return this.articleRepository.create(input);
 	}
 
-	async update(principal: Principal, input: Article.Input) {
+	async update(principal: Principal, id: number, input: Article.Input) {
 		await this.accessControl.assertIsAllowed({
-			action: 'create',
+			action: 'update',
 			principal,
 			subject: 'article'
 		});
 
-		return this.articleRepository.create(input);
+		return this.articleRepository.update(id, input);
 	}
 
 	async delete(principal: Principal, id: number) {

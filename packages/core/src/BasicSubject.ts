@@ -1,6 +1,6 @@
 import {TypeCheck} from "@pallad/type-check";
 
-export namespace Subject {
+export namespace BasicSubject {
 	/**
 	 * Representation of global subject.
 	 * It is sometimes useful to indicate that operation is performed on whole system.

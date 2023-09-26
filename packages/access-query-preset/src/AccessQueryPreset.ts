@@ -35,10 +35,7 @@ export class AccessQueryPreset<T extends [string, unknown]> {
 	/**
 	 * Adds combination of action and subject definition to set of combinations that current permission set can handle
 	 */
-	addEntry<
-		TAction extends string,
-		TSubjectDefinition extends SubjectDefinition
-	>(action: TAction, subjectDefinition: TSubjectDefinition) {
+	addEntry<TEntry extends AccessQueryPreset.Entry<any, any>>({action, subjectDefinition}: TEntry) {
 		if (!this.entriesActionToSubjectPredicates.has(action)) {
 			this.entriesActionToSubjectPredicates.set(action, new Set());
 		}
@@ -104,6 +101,11 @@ export namespace AccessQueryPreset {
 	export interface Subject<TRealSubject> {
 		readonly subjectType: string;
 		readonly wrappedSubject: TRealSubject;
+	}
+
+	export interface Entry<TAction extends string, TSubjectDefinition> {
+		action: TAction;
+		subjectDefinition: TSubjectDefinition
 	}
 }
 

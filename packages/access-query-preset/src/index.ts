@@ -4,3 +4,4 @@
 
 export * from "./AccessQueryPreset";
 export * from "./accessQueryPresetFactory";
+export * from "./types";

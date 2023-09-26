@@ -1,0 +1,7 @@
+{
+  "extends": "@pallad",
+  "root": true,
+  "rules": {
+    "@typescript-eslint/no-throw-literal": "off"
+  }
+}

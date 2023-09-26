@@ -12,7 +12,7 @@ Lets define examples of principals for inspiration. The more principals you've g
 
 Represents an actor that makes unauthenticated interaction with your system.
 
-`@pallad/access-control` defines it as `Principal.Anonymous`.
+`@pallad/access-control` defines it as `BasicPrincipal.Anonymous`.
 ```typescript
 export class Anonymous extends new TypeCheck<Anonymous>('@pallad/access-control/Principal/Anonymous').clazz {
 	readonly kind = 'principal';
@@ -27,17 +27,16 @@ Indicates that system itself performs an action. Might be used to effectively "t
 
 Example of actions that might be restricted only to system:
 * Truncate database storage
-* Getting data bypassing tenancy checks
+* Getting data and bypassing tenancy checks
 
 ## User
 
 Represents authenticated user.
 
-`@pallad/access-control` does not defines such participant as the shape of authenticates users data is so different among the systems therefore to avoid confusion it was not added.
+`@pallad/access-control` does not defines such participant as the shape of authenticates users data is too different among the systems, therefore to avoid confusion it was not added.
 
 Example `User` principal just for sake of inspiration
 ```typescript
-
 export class User {
 	readonly kind = 'principal';
 	readonly type = 'user'
@@ -60,9 +59,7 @@ For example impersonated user:
 * cannot remove account since it is too dangerous action
 * cannot mark notifications, messages as read (very cool feature)
 
-## API
+## Custom
+All possibilities are not listed since that is simply impossible.
+That is why you should not hesitate to create your own type of principal or extend existing ones.
 
-Principal to describe that interaction is made via API.
-Having such principal seems unnecessary at first glance since all available actions are already exposed as API endpoints.
-
-Actually it isn't a stupid idea. See about access control on endpoint level is a bad pattern// TODO
