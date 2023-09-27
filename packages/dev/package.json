@@ -1,6 +1,6 @@
 {
   "name": "@pallad/access-control-dev",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Testing helpers for @pallad/access-control",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
@@ -32,6 +32,6 @@
     "@pallad/access-control": "*"
   },
   "devDependencies": {
-    "@pallad/access-control": "*"
+    "@pallad/access-control": "^1.0.0"
   }
 }
