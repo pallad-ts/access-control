@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "main": "compiled/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "types": "compiled/index.d.ts",
   "scripts": {
     "test": "npx pallad-scripts test",

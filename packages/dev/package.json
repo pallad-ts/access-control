@@ -4,6 +4,9 @@
   "description": "Testing helpers for alpha-ac",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "npx pallad-scripts test",
     "compile": "npm run generate-barrels && npx pallad-scripts compile",
