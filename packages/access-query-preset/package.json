@@ -19,7 +19,8 @@
   ],
   "repository": {
     "type": "git",
-    "directory": "packages/permission-set"
+    "url": "git+https://github.com/pallad-ts/access-control.git",
+    "directory": "packages/access-query-preset"
   },
   "dependencies": {
     "@pallad/entity-ref": "^2.1.0"

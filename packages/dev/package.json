@@ -1,7 +1,7 @@
 {
   "name": "@pallad/access-control-dev",
   "version": "0.0.0",
-  "description": "Testing helpers for alpha-ac",
+  "description": "Testing helpers for @pallad/access-control",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
   "publishConfig": {
@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wookieb/alpha-ac.git",
+    "url": "git+https://github.com/pallad-ts/access-control.git",
     "directory": "packages/dev"
   },
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
