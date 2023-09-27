@@ -78,3 +78,23 @@ That way it is guaranteed that no data leaks without proper permissions.
 
 [More on that](/defining-access-query/access-query-preset)
 
+
+## Should operation on an entity that principal has no access to return `Not found` or `Forbidden`?
+
+That is a very good question.
+
+Returning `Not found` when referring to an entity, that principal has no access to, might be confusing since it is not really true.
+Entity exists but we refuse to give access to it.
+
+Does that lie makes sense?
+
+Sure!
+
+Imagine attempt to reference user by email. Saying `Forbidden` indicates that user with given e-mail address exists.
+That allows for further data exfiltration and essentially guessing who is using the system.
+This is not a piece of information to disclose.
+
+On the other hand opening google docs that you have no access to, displays a prompt that allows to request for access.
+That totally makes sense too. You've received a link from someone else but you cannot see that document and you want to know why.
+
+Having that on mind there is no single definitive answer. Consider whether you can or should disclose information about entity.
