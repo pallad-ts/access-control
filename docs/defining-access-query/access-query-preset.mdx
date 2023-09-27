@@ -7,7 +7,7 @@ Once you have defined possible options for subject and action you might realize 
 For example you don't have action `truncate` on subject `article`.
 Therefore policies needs to be aware of that and filter out unsupported actions for certain subjects.
 
-That is why in tutorial we've explicitly defined set of possible actions and filter out unsupported ones:
+That is why in [tutorial](/access-query/tutorial) we've explicitly defined set of possible actions and filtered out unsupported ones:
 
 ```typescript
 import {Action} from './AccessQueryElements';
@@ -31,7 +31,7 @@ accessControl
 
 It is cumbersome and requires extra maintenance. There is better solution though.
 
-Access Query Preset
+**Access Query Preset**
 
 Access Query Preset is available as separate package `@pallad/access-control-query-preset`.
 ```bash npm2yarn
